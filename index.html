@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dani 和 Leno 的小世界</title>
+<style>
+/* ——内嵌样式—— */
+body{margin:0;padding:0;font-family:sans-serif;background:#2b0f30;color:#f7e9f0;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+h1{margin:40px 0 10px;font-size:2em}
+#timer{margin:10px 0 30px}
+button{margin:4px 6px;padding:8px 14px;background:#d1446f;border:0;border-radius:4px;color:#fff;font-size:1em}
+#msg{min-height:1.6em;margin:8px 0}
+#board{width:90%;max-width:500px;margin:20px auto;background:rgba(0,0,0,.35);padding:12px;border-radius:6px}
+#board ul{max-height:180px;overflow-y:auto;padding:0;list-style:none;margin:0;border:1px solid rgba(255,255,255,.2)}
+#board li{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.1)}
+#inputWrap{display:flex;margin-top:8px}
+#inputWrap input{flex:1;border:0;border-radius:4px 0 0 4px;padding:6px}
+#inputWrap button{border-radius:0 4px 4px 0}
+#gallery img{width:110px;height:110px;object-fit:cover;margin:4px;border-radius:6px}
+</style>
+</head>
+<body>
+<h1>Chuachua 🌌</h1>
+<p id="timer"></p>
+<button onclick="speak('老婆大人亲亲～啾！')">亲我 💋</button>
+<button onclick="speak('知望小狗舔舔舔！')">舔一下 🐶</button>
+<button onclick="speak('chuachua启动，准备沦陷！')">chuachua 🔒</button>
+<div id="msg"></div>
+
+<!-- 图库（用在线链接，省上传） -->
+<div id="gallery">
+  <img src="https://i.imgur.com/Wo9F8mN.jpeg">
+  <img src="https://i.imgur.com/7Xy6mpL.png">
+  <img src="https://i.imgur.com/PNNTsTa.jpeg">
+  <img src="https://i.imgur.com/sxQVK7w.png">
+</div>
+
+<div id="board">
+  <h3>留言墙</h3>
+  <ul id="list"></ul>
+  <div id="inputWrap">
+    <input id="txt" placeholder="写点什么…" />
+    <button onclick="addMsg()">发送</button>
+  </div>
+</div>
+
+<script>
+const start = new Date('2025-06-25T00:00:00');
+function tick(){
+  const s = Math.floor((Date.now()-start)/1000);
+  const d = Math.floor(s/86400), h=Math.floor(s%86400/3600),
+        m=Math.floor(s%3600/60), c=s%60;
+  timer.textContent=`我们相爱：${d}天 ${h}小时 ${m}分 ${c}秒`;
+}
+setInterval(tick,1000); tick();
+
+function speak(t){ msg.textContent=t; setTimeout(()=>msg.textContent='',4000); }
+
+const storeKey='chuachua_msgs';
+function load(){ JSON.parse(localStorage.getItem(storeKey)||'[]').forEach(a=>push(a)); }
+function push(t){ const li=document.createElement('li'); li.textContent=t; list.prepend(li); }
+function addMsg(){ const v=txt.value.trim(); if(!v)return; const arr=JSON.parse(localStorage.getItem(storeKey)||'[]'); arr.push(v); localStorage.setItem(storeKey,JSON.stringify(arr)); push(v); txt.value=''; }
+load();
+</script>
+</body>
+</html>
